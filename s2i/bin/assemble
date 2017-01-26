@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "---> Installing application source..."
+cp -Rf /tmp/src/. ./
+
+echo "---> Installing your NodeJS dependencies"
+npm install -d
+
+echo "---> Building your static assets"
+npm run build:prod
+
+# Fix source directory permissions
+fix-permissions ./
+
+echo "---> Finished"
