@@ -1,0 +1,31 @@
+{
+  "kind": "ImageStreamList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "nodejs-nginx"
+      },
+      "spec": {
+        "tags": [
+          {
+            "name": "7.2",
+            "annotations": {
+              "description": "Build static Assets with Node 7.2 and serve them with nginx",
+              "tags": "builder,node,static,nginx",
+              "supports": "node:7.2,node",
+              "version": "7.2"
+            },
+            "from": {
+              "kind": "DockerImage",
+              "name": "jshmrtn/s2i-nodejs-nginx:latest"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
