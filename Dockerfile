@@ -7,16 +7,19 @@ MAINTAINER Jeremy Zahner <zahner@joshmartin.ch>
 
 EXPOSE 8080
 
+USER root
+
 # This image will be initialized with "npm run $NPM_RUN"
 # See https://docs.npmjs.com/misc/scripts, and your repo's package.json
 # file for possible values of NPM_RUN
 
 ENV NPM_BUILD_COMMAND=start \
-    NODE_VERSION=6.3.1 \
+    NODE_VERSION=7.2.0 \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     NPM_VERSION=3 \
+    YARN_VERSION=0.19.1 \
     DEBUG_PORT=5858 \
     NODE_ENV=production \
     DEV_MODE=false
@@ -33,16 +36,14 @@ RUN set -ex && \
   for key in \
     9554F04D7259F04124DE6B476D5A82AC7E37093B \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
+    0034A06D9D9B0064CE8ADF6BF1747F4AD2306D93 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
     71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
     DD8F2338BAE7501E3DD5AC78C273792F7D83545D \
-    C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
     B9AE9905FFD7803F25714661B63B535A4C206CA9 \
-    93C7E9E91B49E432C2F75674B0A78B0A6C481CF6 \
-    114F43EE0176B71C7BC219DD50A3051F888C628D \
-    7937DFD2AB06298B2293C3187D33FF9D0246406D \
+    C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
   ; do \
-    gpg --keyserver pool.sks-keyservers.net --recv-keys "$key"; \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
   INSTALL_PKGS="bzip2 nss_wrapper" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
@@ -53,12 +54,15 @@ RUN set -ex && \
   gpg --batch -d SHASUMS256.txt.asc | grep " node-v${NODE_VERSION}-linux-x64.tar.gz\$" | sha256sum -c - && \
   tar -zxf node-v${NODE_VERSION}-linux-x64.tar.gz -C /usr/local --strip-components=1 && \
   npm install -g npm@${NPM_VERSION} && \
+  npm install -g yarn@${YARN_VERSION} && \
   find /usr/local/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf; \
   rm -rf ~/node-v${NODE_VERSION}-linux-x64.tar.gz ~/SHASUMS256.txt.asc /tmp/node-v${NODE_VERSION} ~/.npm ~/.node-gyp ~/.gnupg \
     /usr/share/man /tmp/* /usr/local/lib/node_modules/npm/man /usr/local/lib/node_modules/npm/doc /usr/local/lib/node_modules/npm/html
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
+
+USER 1001
 
 # Set the default CMD to print the usage of the language image
 CMD $STI_SCRIPTS_PATH/usage

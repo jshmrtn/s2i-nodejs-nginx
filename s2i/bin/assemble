@@ -1,15 +1,66 @@
 #!/bin/bash
 
+export NODE_ENV=production
+
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
 
-echo "---> Installing your NodeJS dependencies"
-npm install -d
+if [[ -f .s2i/nginx.conf ]]; then
+  echo "---> Installing custom NGINX configuration..."
+  cp .s2i/nginx.conf /opt/app-root/etc/
+else
+  echo "---> Installing stock NGINX configuration..."
+  cat <<CONF > /opt/app-root/etc/nginx.conf
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
 
-echo "---> Building your static assets"
-npm run build:prod
+daemon off;
 
-# Fix source directory permissions
-fix-permissions ./
+error_log /dev/stdout debug;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /dev/stdout;
+
+    index   index.html;
+
+    server {
+	      client_body_temp_path /tmp/nginx_client_temp 1 2;
+
+        listen       8080;
+        root         /opt/app-root/src/dist;
+
+        location / {
+            autoindex on;
+        }
+    }
+
+}
+CONF
+fi
+
+echo "---> Installing your NodeJS dependencies..."
+if [[ -f yarn.lock ]]; then
+  yarn install --production
+else
+  npm install --production
+fi
+
+echo "---> Compiling your static assets..."
+if [[ -f yarn.lock ]]; then
+  yarn run compile
+else
+  npm run compile
+fi
 
 echo "---> Finished"
