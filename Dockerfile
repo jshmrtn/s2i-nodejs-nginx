@@ -14,7 +14,7 @@ USER root
 # file for possible values of NPM_RUN
 
 ENV NPM_BUILD_COMMAND=start \
-    NODE_VERSION=7.2.0 \
+    NODE_VERSION=7.3.0 \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \

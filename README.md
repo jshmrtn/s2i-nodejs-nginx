@@ -7,6 +7,7 @@
 [Node.JS versions currently provided](https://hub.docker.com/r/jshmrtn/s2i-nodejs-nginx/tags/):
 
 - 7.2
+- 7.3
 
 ## Usage
 
