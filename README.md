@@ -29,7 +29,7 @@ Those without admin privileges can install the latest nodejs releases within the
 
 To ensure that each of the latest NodeJS release tags are available and displayed correctly in the web UI, try upgrading / reinstalling the imageStream:
 
-    oc delete is/centos7-s2i-nodejs-nginx ; oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
+    oc delete is/nodejs-nginx ; oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
 
 If you've (automatically) imported this image using the [`oc new-app` example command](#usage), then you may need to clear the auto-imported image stream reference and re-install it.
 
