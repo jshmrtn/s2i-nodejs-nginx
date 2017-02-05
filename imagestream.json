@@ -51,6 +51,18 @@
             }
           },
           {
+            "name": "7",
+            "annotations": {
+              "description": "Build static Assets with the latest Node 7 release and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:latest"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "7.4"
+            }
+          },
+          {
             "name": "latest",
             "annotations": {
               "description": "Build static Assets with the latest version of Node and serve them with nginx",
