@@ -12,42 +12,91 @@
       "spec": {
         "tags": [
           {
-            "name": "7.2",
+            "name": "4.7.3",
             "annotations": {
-              "description": "Build static Assets with Node 7.2 and serve them with nginx",
+              "description": "Build static Assets with Node 4.7.3 and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:7.2",
-              "version": "7.2"
+              "supports": "nodejs:4.7.3",
+              "version": "4.7.3"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "jshmrtn/s2i-nodejs-nginx:nodejs-7.2.0"
+              "name": "jshmrtn/s2i-nodejs-nginx:4"
             }
           },
           {
-            "name": "7.3",
+            "name": "4",
             "annotations": {
-              "description": "Build static Assets with Node 7.3 and serve them with nginx",
+              "description": "Build static Assets with the latest Node 4 release and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:7.3",
-              "version": "7.3"
+              "supports": "nodejs:4"
             },
             "from": {
-              "kind": "DockerImage",
-              "name": "jshmrtn/s2i-nodejs-nginx:nodejs-7.3.0"
+              "kind": "ImageStreamTag",
+              "name": "4.7.3"
             }
           },
           {
-            "name": "7.4",
+            "name": "5.12.0",
             "annotations": {
-              "description": "Build static Assets with Node 7.4 and serve them with nginx",
+              "description": "Build static Assets with Node 5.12.0 and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:7.4",
-              "version": "7.4"
+              "supports": "nodejs:5.12.0",
+              "version": "5.12.0"
             },
             "from": {
               "kind": "DockerImage",
-              "name": "jshmrtn/s2i-nodejs-nginx:nodejs-7.4.0"
+              "name": "jshmrtn/s2i-nodejs-nginx:5"
+            }
+          },
+          {
+            "name": "5",
+            "annotations": {
+              "description": "Build static Assets with the latest Node 5 release and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:5"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "5.12.0"
+            }
+          },
+          {
+            "name": "6.9.5",
+            "annotations": {
+              "description": "Build static Assets with Node 6.9.5 and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:6.9.5",
+              "version": "6.9.5"
+            },
+            "from": {
+              "kind": "DockerImage",
+              "name": "jshmrtn/s2i-nodejs-nginx:6"
+            }
+          },
+          {
+            "name": "6",
+            "annotations": {
+              "description": "Build static Assets with the latest Node 6 release and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:6"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "6.9.5"
+            }
+          },
+          {
+            "name": "7.5.0",
+            "annotations": {
+              "description": "Build static Assets with Node 7.5.0 and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:7.5.0",
+              "version": "7.5.0"
+            },
+            "from": {
+              "kind": "DockerImage",
+              "name": "jshmrtn/s2i-nodejs-nginx:7"
             }
           },
           {
@@ -55,11 +104,11 @@
             "annotations": {
               "description": "Build static Assets with the latest Node 7 release and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:latest"
+              "supports": "nodejs:7"
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "7.4"
+              "name": "7.5.0"
             }
           },
           {
@@ -71,7 +120,19 @@
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "7.4"
+              "name": "7"
+            }
+          },
+          {
+            "name": "lts",
+            "annotations": {
+              "description": "Build static Assets with the long term support version of Node and serve them with nginx",
+              "tags": "builder,nodejs,static,nginx",
+              "supports": "nodejs:lts"
+            },
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "6"
             }
           }
         ]

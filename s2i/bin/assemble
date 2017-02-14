@@ -7,7 +7,7 @@ cp -Rf /tmp/src/. ./
 
 if [[ -f .s2i/nginx.conf ]]; then
   echo "---> Installing custom NGINX configuration..."
-  cp .s2i/nginx.conf /opt/app-root/etc/
+  cp -Rf .s2i/nginx.conf /opt/app-root/etc/nginx.conf
 else
   echo "---> Installing stock NGINX configuration..."
   cat <<CONF > /opt/app-root/etc/nginx.conf
@@ -34,6 +34,8 @@ http {
 
     index   index.html;
 
+    include /opt/app-root/etc/auth.conf
+
     server {
 	      client_body_temp_path /tmp/nginx_client_temp 1 2;
 
@@ -47,6 +49,18 @@ http {
 
 }
 CONF
+fi
+
+if [[ "$BASICAUTH_USERNAME" && "$BASICAUTH_PASSWORD" && "$BASICAUTH_TITLE" ]]; then
+  echo "---> Creates .htpasswd with basic auth credentials for user $BASICAUTH_USERNAME."
+  htpasswd -bc /opt/app-root/etc/.htpasswd $BASICAUTH_USERNAME $BASICAUTH_PASSWORD
+  echo "---> Adding auth_basic rules to nginx.conf..."
+  sed -i '/server {/a\
+  \
+        satisfy all;\
+        auth_basic "'$BASICAUTH_TITLE'";\
+        auth_basic_user_file \/opt\/app-root\/etc\/.htpasswd;\
+  ' /opt/app-root/etc/nginx.conf
 fi
 
 echo "---> Installing your NodeJS dependencies..."

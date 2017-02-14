@@ -6,10 +6,12 @@
 
 [Node.JS versions currently provided](https://hub.docker.com/r/jshmrtn/s2i-nodejs-nginx/tags/):
 
-- 7.2
-- 7.3
-- 7.4
-- latest (7.4)
+- 4
+- 5
+- 6
+- 7
+- lts (6)
+- latest (7)
 
 ## Usage
 
@@ -27,9 +29,21 @@ There are several ways to make this base image and the full list of tagged nodej
 
 Those without admin privileges can install the latest nodejs releases within their project context with:
 
+**Local**
+
     oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
 
+**Remote**
+
+    oc create -f imagestream.json
+
 To ensure that each of the latest NodeJS release tags are available and displayed correctly in the web UI, try upgrading / reinstalling the imageStream:
+
+**Local**
+
+    oc delete is/nodejs-nginx ; oc create -f imagestream.json
+
+**Remote**
 
     oc delete is/nodejs-nginx ; oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
 
@@ -38,5 +52,11 @@ If you've (automatically) imported this image using the [`oc new-app` example co
 #### For Administrators
 
 Administrators can make these S2I releases available globally (visible in all projects, by all users) by adding them to the `openshift` namespace:
+
+**Local**
+
+    oc create -n openshift -f imagestream.json
+
+**Remote**
 
     oc create -n openshift -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json

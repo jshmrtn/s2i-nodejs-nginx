@@ -14,7 +14,7 @@ USER root
 # file for possible values of NPM_RUN
 
 ENV NPM_BUILD_COMMAND=start \
-    NODE_VERSION=7.4.0 \
+    NODE_VERSION=7.5.0 \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
@@ -45,7 +45,7 @@ RUN set -ex && \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
-  INSTALL_PKGS="bzip2 nss_wrapper" && \
+  INSTALL_PKGS="httpd-tools bzip2 nss_wrapper" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \
   yum clean all -y && \
