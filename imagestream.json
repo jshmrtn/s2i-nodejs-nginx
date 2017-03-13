@@ -12,12 +12,12 @@
       "spec": {
         "tags": [
           {
-            "name": "4.7.3",
+            "name": "4.8.0",
             "annotations": {
-              "description": "Build static Assets with Node 4.7.3 and serve them with nginx",
+              "description": "Build static Assets with Node 4.8.0 and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:4.7.3",
-              "version": "4.7.3"
+              "supports": "nodejs:4.8.0",
+              "version": "4.8.0"
             },
             "from": {
               "kind": "DockerImage",
@@ -33,7 +33,7 @@
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "4.7.3"
+              "name": "4.8.0"
             }
           },
           {
@@ -62,12 +62,12 @@
             }
           },
           {
-            "name": "6.9.5",
+            "name": "6.10.0",
             "annotations": {
-              "description": "Build static Assets with Node 6.9.5 and serve them with nginx",
+              "description": "Build static Assets with Node 6.10.0 and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:6.9.5",
-              "version": "6.9.5"
+              "supports": "nodejs:6.10.0",
+              "version": "6.10.0"
             },
             "from": {
               "kind": "DockerImage",
@@ -83,16 +83,16 @@
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "6.9.5"
+              "name": "6.10.0"
             }
           },
           {
-            "name": "7.5.0",
+            "name": "7.7.2",
             "annotations": {
-              "description": "Build static Assets with Node 7.5.0 and serve them with nginx",
+              "description": "Build static Assets with Node 7.7.2 and serve them with nginx",
               "tags": "builder,nodejs,static,nginx",
-              "supports": "nodejs:7.5.0",
-              "version": "7.5.0"
+              "supports": "nodejs:7.7.2",
+              "version": "7.7.2"
             },
             "from": {
               "kind": "DockerImage",
@@ -108,7 +108,7 @@
             },
             "from": {
               "kind": "ImageStreamTag",
-              "name": "7.5.0"
+              "name": "7.7.2"
             }
           },
           {

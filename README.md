@@ -1,6 +1,6 @@
 # S2I: NodeJS / NGINX
 
-**This project is under heavy development and not yet ready.**
+**This project is under heavy development and not yet ready for production.**
 
 ## Releases / Versions
 
@@ -13,6 +13,8 @@
 - lts (6)
 - latest (7)
 
+We will tag minor versions as well, but these will be replaced. If using this builder, you should always set major versions or lts/latest.
+
 ## Usage
 
 OpenShift allows you to quickly start a build using the web console, or the CLI.
@@ -20,6 +22,42 @@ OpenShift allows you to quickly start a build using the web console, or the CLI.
 With the [`oc` command-line tool](https://github.com/openshift/origin/releases) you can bundle a static project (based on NodeJS, for example Webpack) into a centos7 image running only NGINX.:
 
     oc new-app jshmrtn/s2i-nodejs-nginx:RELEASE~REPO_URL
+
+### Configuration
+
+#### nginx.conf
+
+You can add your custom nginx.conf to the container. While assembling, the builder looks for a nginx.conf file in your project roots `.s2i/` directory. If there is a nginx.conf present at `./s2i/nginx.conf`, it will take it instead of the default config file.
+
+```bash
+if [[ -f .s2i/nginx.conf ]]; then
+  echo "---> Installing custom NGINX configuration..."
+  cp -Rf .s2i/nginx.conf /opt/app-root/etc/nginx.conf
+else
+```
+
+#### Basic Auth
+
+The builder can add basic auth to the container for you. All you need to do is to set some environment variables.
+**IMPORTANT: You need to set these on the build config!**
+
+```bash
+BASICAUTH_USERNAME
+```
+
+The username used for basic auth.
+
+```bash
+BASICAUTH_PASSWORD
+```
+
+The password used for basic auth.
+
+```bash
+BASICAUTH_TITLE
+```
+
+The title used for basic auth.
 
 ## Installation
 
