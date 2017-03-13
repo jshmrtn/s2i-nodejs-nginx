@@ -63,7 +63,7 @@ RUN set -ex && \
     /usr/share/man /tmp/* /usr/local/lib/node_modules/npm/man /usr/local/lib/node_modules/npm/doc /usr/local/lib/node_modules/npm/html
 
 # Add s2i nginx custom files
-ADD ./contrib/nginx.default.conf /opt/app-root/etc/nginx/nginx.default.conf
+ADD ./contrib/nginx.default.conf /opt/app-root/etc/nginx.default.conf
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
