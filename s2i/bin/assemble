@@ -2,53 +2,27 @@
 
 export NODE_ENV=production
 
+if [[ "$1" == "-h" ]]; then
+  # If the 's2i-nodejs-nginx' assemble script is executed with '-h' flag,
+  # print the usage.
+  exec /usr/libexec/s2i/usage
+fi
+
+# Restore artifacts from the previous build (if they exist).
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring build artifacts..."
+  mv /tmp/artifacts/. ./
+fi
+
 echo "---> Installing application source..."
 cp -Rf /tmp/src/. ./
 
-if [[ -f .s2i/nginx.conf ]]; then
+if [[ -f .s2i/nginx/nginx.conf ]]; then
   echo "---> Installing custom NGINX configuration..."
-  cp -Rf .s2i/nginx.conf /opt/app-root/etc/nginx.conf
+  cp -Rf .s2i/nginx /opt/app-root/etc/
 else
   echo "---> Installing stock NGINX configuration..."
-  cat <<CONF > /opt/app-root/etc/nginx.conf
-# For more information on configuration, see:
-#   * Official English Documentation: http://nginx.org/en/docs/
-#   * Official Russian Documentation: http://nginx.org/ru/docs/
-
-daemon off;
-
-error_log /dev/stdout debug;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-    default_type  application/octet-stream;
-
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
-
-    access_log /dev/stdout;
-
-    index   index.html;
-
-    include /opt/app-root/etc/auth.conf
-
-    server {
-	      client_body_temp_path /tmp/nginx_client_temp 1 2;
-
-        listen       8080;
-        root         /opt/app-root/src/dist;
-
-        location / {
-            autoindex on;
-        }
-    }
-
-}
-CONF
+  cp -Rf /opt/app-root/etc/nginx.default.conf /opt/app-root/etc/nginx.conf
 fi
 
 if [[ "$BASICAUTH_USERNAME" && "$BASICAUTH_PASSWORD" && "$BASICAUTH_TITLE" ]]; then
