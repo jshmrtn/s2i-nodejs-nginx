@@ -31,7 +31,7 @@ if [[ "$BASICAUTH_USERNAME" && "$BASICAUTH_PASSWORD" && "$BASICAUTH_TITLE" ]]; t
   echo "---> Adding auth_basic rules to nginx.conf..."
   sed -i '/server {/a\
   \
-        satisfy all;\
+        satisfy any;\
         auth_basic "'$BASICAUTH_TITLE'";\
         auth_basic_user_file \/opt\/app-root\/etc\/.htpasswd;\
   ' /opt/app-root/etc/nginx.conf
