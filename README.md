@@ -82,11 +82,11 @@ Those without admin privileges can install the latest nodejs releases within the
 
 **Local**
 
-    oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
+    oc create -f imagestream.json
 
 **Remote**
 
-    oc create -f imagestream.json
+    oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
 
 To ensure that each of the latest NodeJS release tags are available and displayed correctly in the web UI, try upgrading / reinstalling the imageStream:
 
