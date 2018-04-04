@@ -1,7 +1,5 @@
 # S2I: NodeJS / NGINX
 
-**This project is under heavy development and not yet ready for production.**
-
 ## Releases / Versions
 
 [Node.JS versions currently provided](https://hub.docker.com/r/jshmrtn/s2i-nodejs-nginx/tags/):
@@ -10,8 +8,8 @@
 - 5
 - 6
 - 7
-- lts (6)
-- latest (7)
+- 8 (lts)
+- 9 (latest)
 
 We will tag minor versions as well, but these will be replaced. If using this builder, you should always set major versions or lts/latest.
 
@@ -76,7 +74,7 @@ The title used for basic auth.
 
 There are several ways to make this base image and the full list of tagged nodejs releases available to users during OpenShift's web-based "Add to Project" workflow.
 
-### For OpenShift Online Next Gen Developer Preview
+### For OpenShift
 
 Those without admin privileges can install the latest nodejs releases within their project context with:
 

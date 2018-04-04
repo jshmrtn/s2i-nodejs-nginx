@@ -14,12 +14,12 @@ USER root
 # file for possible values of NPM_RUN
 
 ENV NPM_BUILD_COMMAND=start \
-    NODE_VERSION=7.7.4 \
+    NODE_VERSION=9.10.1 \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
     NPM_VERSION=4 \
-    YARN_VERSION=0.21.3 \
+    YARN_VERSION=1.5.1 \
     DEBUG_PORT=5858 \
     NODE_ENV=production \
     DEV_MODE=false
@@ -36,7 +36,7 @@ RUN set -ex && \
   for key in \
     9554F04D7259F04124DE6B476D5A82AC7E37093B \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
-    0034A06D9D9B0064CE8ADF6BF1747F4AD2306D93 \
+    0034A06D9D9B0064CE8ADF6BF18.11.1AD2306D93 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
     71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
     DD8F2338BAE7501E3DD5AC78C2F7D83545D \
@@ -45,7 +45,7 @@ RUN set -ex && \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
-  INSTALL_PKGS="httpd-tools bzip2 nss_wrapper" && \
+  INSTALL_PKGS="httpd-tools bzip2 nss_wrapper wget git" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \
   yum clean all -y && \

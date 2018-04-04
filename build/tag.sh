@@ -15,11 +15,17 @@ for BASE in $BASE_IMAGES ; do
       elif [[ $RELEASE == 6.* ]] ; then
         echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:6"
         docker image tag $img $BASE:6
-        echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:lts"
-        docker image tag $img $BASE:lts
       elif [[ $RELEASE == 7.* ]] ; then
         echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:7"
         docker image tag $img $BASE:7
+      elif [[ $RELEASE == 8.* ]] ; then
+        echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:8"
+        docker image tag $img $BASE:8
+        echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:lts"
+        docker image tag $img $BASE:lts
+      elif [[ $RELEASE == 9.* ]] ; then
+        echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:9"
+        docker image tag $img $BASE:9
         echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:latest"
         docker image tag $img $BASE:latest
       fi
