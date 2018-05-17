@@ -7,7 +7,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "jshmrtn/s2i-nodejs-nginx"
+        "name": "s2i-nodejs-nginx"
       },
       "spec": {
         "tags": [
