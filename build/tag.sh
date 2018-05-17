@@ -28,6 +28,9 @@ for BASE in $BASE_IMAGES ; do
         docker image tag $img $BASE:9
         echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:latest"
         docker image tag $img $BASE:latest
+      elif [[ $RELEASE == 10.* ]] ; then
+        echo "tagging ${BASE}:${RELEASE} for release as: ${BASE}:10"
+        docker image tag $img $BASE:10
       fi
     done
   fi

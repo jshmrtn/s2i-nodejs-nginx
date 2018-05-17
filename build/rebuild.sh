@@ -9,8 +9,6 @@ NUMS="$(seq 1 `echo $LAST_RELEASES | wc -w`)"
 # Files with hard-coded version strings:
 LAST_UPDATES_NEEDED="imagestream.json \
   README.md"
-LATEST_UPDATES_NEEDED="build/build.sh \
-  Dockerfile"
 
 if [ "${LAST_RELEASES}" != "${LATEST_RELEASES}" ] ; then
   echo "New NodeJS releases available!: ${LATEST_RELEASES}"
@@ -19,19 +17,13 @@ if [ "${LAST_RELEASES}" != "${LATEST_RELEASES}" ] ; then
   for release in $NUMS ; do
     last="$( echo ${LAST_RELEASES} | cut -d' ' -f$release )"
     latest="$( echo ${LATEST_RELEASES} | cut -d' ' -f$release )"
-    if [ $last != $latest ] ; then
+    if [ "$last" != "$latest" ] ; then
       echo "Updating v$last to v$latest"
       for file in $LAST_UPDATES_NEEDED ; do
         sed -i '' -e "s/${last}/${latest}/g" $file
       done
     fi
   done
-
-  if [ "${LAST_RELEASE}" != "${LATEST_RELEASE}" ] ; then
-    for file in $LATEST_UPDATES_NEEDED ; do
-      sed -i '' -e "s/${LAST_RELEASE}/${LATEST_RELEASE}/g" $file
-    done
-  fi
 
   docker pull centos/nginx-18-centos7
 

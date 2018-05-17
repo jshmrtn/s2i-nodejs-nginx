@@ -1,9 +1,7 @@
-FROM centos/nginx-18-centos7
+FROM centos/nginx-18-centos7:latest
 
 # This image provides a Node.JS environment you can use to run your Node.JS
 # applications.
-
-MAINTAINER Jeremy Zahner <zahner@joshmartin.ch>
 
 EXPOSE 8080
 
@@ -13,38 +11,51 @@ USER root
 # See https://docs.npmjs.com/misc/scripts, and your repo's package.json
 # file for possible values of NPM_RUN
 
+ARG NODE_VERSION
+ARG GIT_VERSION
+
 ENV NPM_BUILD_COMMAND=start \
-    NODE_VERSION=9.10.1 \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
-    NPM_VERSION=4 \
-    YARN_VERSION=1.5.1 \
+    NPM_VERSION=5 \
+    YARN_VERSION=1.6.0 \
     DEBUG_PORT=5858 \
     NODE_ENV=production \
     DEV_MODE=false
 
 LABEL io.k8s.description="Plattform for building and running static sites with NodeJS and NGINX." \
-      io.k8s.display-name="build-nodejs-nginx" \
+      io.k8s.display-name="build-nodejs-nginx NodeJS v$NODE_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,nodejs,nodejs$NODE_VERSION,nginx" \
-      com.redhat.deployments-dir="/opt/app-root/src"
+      com.redhat.dev-mode="DEV_MODE:false" \
+      com.redhat.deployments-dir="${APP_ROOT}/src" \
+      com.redhat.dev-mode.port="DEBUG_PORT:5858"\
+      io.origin.builder-version="$GIT_VERSION" \
+      name="jshmrtn/s2i-nodejs-nginx" \
+      maintainer="Jeremy Zahner <zahner@joshmartin.ch>" \
+      version="$NODE_VERSION"
 
 # Download and install a binary from nodejs.org
 # Add the gpg keys listed at https://github.com/nodejs/node
 RUN set -ex && \
   for key in \
-    9554F04D7259F04124DE6B476D5A82AC7E37093B \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
-    0034A06D9D9B0064CE8ADF6BF18.11.1AD2306D93 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
     71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
-    DD8F2338BAE7501E3DD5AC78C2F7D83545D \
-    B9AE9905FFD7803F25714661B63B535A4C206CA9 \
+    DD8F2338BAE7501E3DD5AC78C273792F7D83545D \
     C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
+    B9AE9905FFD7803F25714661B63B535A4C206CA9 \
+    56730D5401028683275BD23C23EFEFE93C4CFFFE \
+    77984A986EBC2AA786BC0F66B01FBB92821C587A \
+    9554F04D7259F04124DE6B476D5A82AC7E37093B \
+    93C7E9E91B49E432C2F75674B0A78B0A6C481CF6 \
+    114F43EE0176B71C7BC219DD50A3051F888C628D \
+    7937DFD2AB06298B2293C3187D33FF9D0246406D \
   ; do \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
   done && \
+  yum install -y epel-release && \
   INSTALL_PKGS="httpd-tools bzip2 nss_wrapper wget git" && \
   yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
   rpm -V $INSTALL_PKGS && \
@@ -59,15 +70,16 @@ RUN set -ex && \
   rpm -V yarn-${YARN_VERSION} && \
   yum clean all -y && \
   find /usr/local/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf; \
-  rm -rf ~/node-v${NODE_VERSION}-linux-x64.tar.gz ~/SHASUMS256.txt.asc /tmp/node-v${NODE_VERSION} ~/.npm ~/.node-gyp ~/.gnupg \
-    /usr/share/man /tmp/* /usr/local/lib/node_modules/npm/man /usr/local/lib/node_modules/npm/doc /usr/local/lib/node_modules/npm/html
-
-# Add s2i nginx custom files
-ADD ./contrib/nginx.default.conf /opt/app-root/etc/nginx.default.conf
+  rm -rf ~/node-v${NODE_VERSION}-linux-x64.tar.gz ~/SHASUMS256.txt.asc /tmp/node-v${NODE_VERSION} ~/.npm ~/.node-gyp ~/.gnupg /usr/share/man /tmp/* /usr/local/lib/node_modules/npm/man /usr/local/lib/node_modules/npm/doc /usr/local/lib/node_modules/npm/html
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
+# Add s2i nginx custom files
+ADD ./contrib/nginx.default.conf /opt/app-root/etc/nginx.default.conf
+
+# Drop the root user and make the content of /opt/app-root owned by user 1001
+RUN chown -R 1001:0 ${APP_ROOT} && chmod -R ug+rwx ${APP_ROOT}
 USER 1001
 
 # Set the default CMD to print the usage of the language image

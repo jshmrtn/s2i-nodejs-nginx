@@ -8,7 +8,8 @@ var request = require('request'),
     '6': undefined,
     '7': undefined,
     '8': undefined,
-    '9': undefined
+    '9': undefined,
+    '10': undefined
   };
 
 function parse_releases(json_releases) {
@@ -30,7 +31,7 @@ function parse_releases(json_releases) {
   for (var version in latest_releases) {
     versions.push(latest_releases[version]);
   }
-  console.log(versions.sort().join(' '));
+  console.log(versions.sort((a, b) => semver.gt(a, b)).join(' '));
 };
 
 request('https://nodejs.org/dist/index.json', function (error, response, body) {

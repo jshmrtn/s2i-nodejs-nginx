@@ -1,4 +1,7 @@
 build = build/build.sh
+rebuild = build/rebuild.sh
+tag = build/tag.sh
+publish = build/publish.sh
 
 script_env = \
 	VERSIONS="$(VERSIONS)"                            \
@@ -11,20 +14,19 @@ build:
 	$(script_env) $(build)
 
 .PHONY: all
-all:
-	make rebuild && make test && make build && make tags && make publish
+all: rebuild test build tags publish
 
 .PHONY: tags
 tags:
-	$(script_env) npm run tag
+	$(script_env) $(tag)
 
 .PHONY: publish
 publish:
-	$(script_env) npm run pub
+	$(script_env) $(publish)
 
 .PHONY: rebuild
 rebuild:
-	$(script_env) npm run rebuild
+	$(script_env) $(rebuild)
 
 .PHONY: test
 test:

@@ -9,7 +9,8 @@
 - 6
 - 7
 - 8 (lts)
-- 9 (latest)
+- 9
+- 10 (latest)
 
 We will tag minor versions as well, but these will be replaced. If using this builder, you should always set major versions or lts/latest.
 

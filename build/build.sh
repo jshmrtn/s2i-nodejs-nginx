@@ -8,21 +8,6 @@
 
 VERSION=${2-$VERSION}
 
-DOCKERFILE="Dockerfile"
-
-# Cleanup the temporary Dockerfile created by docker build with version
-trap "rm -f ${DOCKERFILE}.${version}" SIGINT SIGQUIT EXIT
-
-# Perform docker build but append the LABEL with GIT commit id at the end
-function docker_build_with_version {
-  cp ${DOCKERFILE} "${DOCKERFILE}.${version}"
-  git_version=$(git rev-parse HEAD)
-  sed -i '' -e "s/NODE_VERSION *= *.*/NODE_VERSION=${version} \\\/" "${DOCKERFILE}.${version}"
-  echo "LABEL io.origin.builder-version=\"${git_version}\"" >> "${DOCKERFILE}.${version}"
-  docker build -t ${IMAGE_NAME}:${version} -f "${DOCKERFILE}.${version}" .
-  rm -f "${DOCKERFILE}.${version}"
-}
-
 # Specify a VERSION variable to build a specific nodejs.org release
 # or specify a list of VERSIONS
 versions=${VERSION:-$VERSIONS}
@@ -32,6 +17,10 @@ for version in ${versions}; do
 
   echo "-> Building ${IMAGE_NAME}:${version} ..."
 
-  docker_build_with_version Dockerfile
+  docker build \
+    -t "${IMAGE_NAME}:${version}" \
+    --build-arg NODE_VERSION=${version} \
+    --build-arg GIT_VERSION="$(git rev-parse HEAD)" \
+    .
 
 done

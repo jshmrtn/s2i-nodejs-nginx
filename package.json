@@ -22,9 +22,9 @@
   "author": "jshmrtn",
   "scripts": {
     "start": "make all",
-    "rebuild": "build/rebuild.sh",
-    "tag": "build/tag.sh",
-    "pub": "build/publish.sh",
+    "rebuild": "make rebuild",
+    "tag": "make tag",
+    "pub": "make publish",
     "build": "make",
     "test": "make test",
     "clean": "docker image prune"

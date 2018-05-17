@@ -39,9 +39,12 @@ fi
 
 echo "---> Installing your NodeJS dependencies..."
 if [[ -f yarn.lock ]]; then
-  yarn install --production
+  yarn config set prefix $(npm config get prefix)
+  yarn config set cache-folder /tmp/.yarn-cache
+  yarn install --non-interactive --production=false
 else
-  npm install --production
+  npm config set cache /tmp/.npm-cache
+  npm install
 fi
 
 echo "---> Compiling your static assets..."
@@ -50,5 +53,25 @@ if [[ -f yarn.lock ]]; then
 else
   npm run compile
 fi
+
+echo "---> Removing Build Files"
+
+for file in *; do
+  if [ "$file" != "dist" ]
+  then
+    echo "Deleting $file"
+    rm -rf $file
+  fi
+done
+for file in .*; do
+  case "$file" in
+    ".s2i"|".."|"."|".npm-global")
+      ;;
+    *)
+      echo "Deleting $file"
+      rm -rf $file || echo "Couldn't delete $file"
+      ;;
+  esac
+done
 
 echo "---> Finished"
