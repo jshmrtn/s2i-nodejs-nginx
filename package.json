@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/jshmrtn/s2i-nodejs-nginx.git"
   },
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Build static sites on nodejs. Run them on NGINX. Based on CentOS.",
   "dependencies": {
     "request": "^2.72.0",
