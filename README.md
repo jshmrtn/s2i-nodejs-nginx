@@ -46,8 +46,6 @@ You can include files in your custom configuration. This is useful if you have m
 include       /opt/app-root/etc/mime.types;
 ```
 
-
-
 #### Basic Auth
 
 The builder can add basic auth to the container for you. All you need to do is to set some environment variables.
@@ -70,43 +68,3 @@ BASICAUTH_TITLE
 ```
 
 The title used for basic auth.
-
-## Installation
-
-There are several ways to make this base image and the full list of tagged nodejs releases available to users during OpenShift's web-based "Add to Project" workflow.
-
-### For OpenShift
-
-Those without admin privileges can install the latest nodejs releases within their project context with:
-
-**Local**
-
-    oc create -f imagestream.json
-
-**Remote**
-
-    oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
-
-To ensure that each of the latest NodeJS release tags are available and displayed correctly in the web UI, try upgrading / reinstalling the imageStream:
-
-**Local**
-
-    oc delete is/nodejs-nginx ; oc create -f imagestream.json
-
-**Remote**
-
-    oc delete is/nodejs-nginx ; oc create -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
-
-If you've (automatically) imported this image using the [`oc new-app` example command](#usage), then you may need to clear the auto-imported image stream reference and re-install it.
-
-#### For Administrators
-
-Administrators can make these S2I releases available globally (visible in all projects, by all users) by adding them to the `openshift` namespace:
-
-**Local**
-
-    oc create -n openshift -f imagestream.json
-
-**Remote**
-
-    oc create -n openshift -f https://raw.githubusercontent.com/jshmrtn/s2i-nodejs-nginx/master/imagestream.json
