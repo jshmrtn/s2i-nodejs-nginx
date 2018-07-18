@@ -1,0 +1,77 @@
+#!/bin/bash -e
+
+export NODE_ENV=production
+
+if [[ "$1" == "-h" ]]; then
+  # If the 's2i-nodejs-nginx' assemble script is executed with '-h' flag,
+  # print the usage.
+  exec /usr/libexec/s2i/usage
+fi
+
+# Restore artifacts from the previous build (if they exist).
+if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
+  echo "---> Restoring build artifacts..."
+  mv /tmp/artifacts/. ./
+fi
+
+echo "---> Installing application source..."
+cp -Rf /tmp/src/. ./
+
+if [[ -f .s2i/nginx/nginx.conf ]]; then
+  echo "---> Installing custom NGINX configuration..."
+  cp -Rf .s2i/nginx/. /opt/app-root/etc/
+else
+  echo "---> Installing stock NGINX configuration..."
+  cp -Rf /opt/app-root/etc/nginx.default.conf /opt/app-root/etc/nginx.conf
+fi
+
+if [[ "$BASICAUTH_USERNAME" && "$BASICAUTH_PASSWORD" && "$BASICAUTH_TITLE" ]]; then
+  echo "---> Creates .htpasswd with basic auth credentials for user $BASICAUTH_USERNAME."
+  htpasswd -bc /opt/app-root/etc/.htpasswd $BASICAUTH_USERNAME $BASICAUTH_PASSWORD
+  echo "---> Adding auth_basic rules to nginx.conf..."
+  sed -i '/server {/a\
+  \
+        satisfy any;\
+        auth_basic "'$BASICAUTH_TITLE'";\
+        auth_basic_user_file \/opt\/app-root\/etc\/.htpasswd;\
+  ' /opt/app-root/etc/nginx.conf
+fi
+
+echo "---> Installing your NodeJS dependencies..."
+if [[ -f yarn.lock ]]; then
+  yarn config set prefix $(npm config get prefix)
+  yarn config set cache-folder /tmp/.yarn-cache
+  yarn install --non-interactive --production=false
+else
+  npm config set cache /tmp/.npm-cache
+  npm install
+fi
+
+echo "---> Compiling your static assets..."
+if [[ -f yarn.lock ]]; then
+  yarn run compile
+else
+  npm run compile
+fi
+
+echo "---> Removing Build Files"
+
+for file in *; do
+  if [ "$file" != "dist" ]
+  then
+    echo "Deleting $file"
+    rm -rf $file
+  fi
+done
+for file in .*; do
+  case "$file" in
+    ".s2i"|".."|"."|".npm-global")
+      ;;
+    *)
+      echo "Deleting $file"
+      rm -rf $file || echo "Couldn't delete $file"
+      ;;
+  esac
+done
+
+echo "---> Finished"

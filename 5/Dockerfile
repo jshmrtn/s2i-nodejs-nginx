@@ -11,15 +11,14 @@ USER root
 # See https://docs.npmjs.com/misc/scripts, and your repo's package.json
 # file for possible values of NPM_RUN
 
-ARG NODE_VERSION
-ARG GIT_VERSION
-
 ENV NPM_BUILD_COMMAND=start \
     NPM_CONFIG_LOGLEVEL=info \
     NPM_CONFIG_PREFIX=$HOME/.npm-global \
     PATH=$HOME/node_modules/.bin/:$HOME/.npm-global/bin/:$PATH \
+    NODE_VERSION=4 \
+    GIT_VERSION=master \
     NPM_VERSION=5 \
-    YARN_VERSION=1.6.0 \
+    YARN_VERSION=1.7.0 \
     DEBUG_PORT=5858 \
     NODE_ENV=production \
     DEV_MODE=false
