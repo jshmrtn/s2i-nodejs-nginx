@@ -1,4 +1,4 @@
-FROM centos/nginx-18-centos7:latest
+FROM centos/nginx-112-centos7:latest
 
 # This image provides a Node.JS environment you can use to run your Node.JS
 # applications.
