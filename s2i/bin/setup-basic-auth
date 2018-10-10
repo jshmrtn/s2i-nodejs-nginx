@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+if [[ "$BASICAUTH_USERNAME" && "$BASICAUTH_PASSWORD" && "$BASICAUTH_TITLE" ]]; then
+  echo "---> Creates .htpasswd with basic auth credentials for user $BASICAUTH_USERNAME."
+  htpasswd -bc /opt/app-root/etc/.htpasswd $BASICAUTH_USERNAME $BASICAUTH_PASSWORD
+  echo "---> Adding auth_basic rules to nginx.conf..."
+  sed -i '/server {/a\
+  \
+        satisfy any;\
+        auth_basic "'$BASICAUTH_TITLE'";\
+        auth_basic_user_file \/opt\/app-root\/etc\/.htpasswd;\
+  ' /opt/app-root/etc/nginx.conf
+fi

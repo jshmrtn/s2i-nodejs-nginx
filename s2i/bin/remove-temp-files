@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+echo "---> Removing Build Files"
+
+files=($(ls -a))
+for file in "${files[@]}"; do
+  case "$file" in
+    "dist"|".s2i"|".."|"."|".npm-global"|"node_modules")
+      ;;
+    *)
+      echo "Deleting $file"
+      rm -rf $file || echo "Couldn't delete $file"
+    ;;
+  esac
+done

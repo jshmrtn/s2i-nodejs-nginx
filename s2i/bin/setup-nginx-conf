@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+if [[ -f .s2i/nginx/nginx.conf ]]; then
+  echo "---> Installing custom NGINX configuration..."
+  cp -Rf .s2i/nginx/. /opt/app-root/etc/
+else
+  echo "---> Installing stock NGINX configuration..."
+  cp -Rf /opt/app-root/etc/nginx.default.conf /opt/app-root/etc/nginx.conf
+fi

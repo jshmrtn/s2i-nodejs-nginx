@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+export NODE_ENV=production
+
+if [[ "$1" == "-h" ]]; then
+  # If the 's2i-nodejs-nginx' assemble script is executed with '-h' flag,
+  # print the usage.
+  exec /usr/libexec/s2i/usage
+fi
+
+/usr/libexec/s2i/restore-artifacts
+/usr/libexec/s2i/install-source
+/usr/libexec/s2i/setup-nginx-conf
+/usr/libexec/s2i/setup-basic-auth
+/usr/libexec/s2i/install-deps
+/usr/libexec/s2i/compile-dist
+/usr/libexec/s2i/remove-temp-files
+
+echo "---> Finished"

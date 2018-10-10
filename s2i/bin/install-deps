@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+echo "---> Installing your NodeJS dependencies..."
+if [[ -f yarn.lock ]]; then
+  yarn config set prefix $(npm config get prefix)
+  yarn config set cache-folder "$HOME/.yarn-cache"
+  yarn install --non-interactive --production=false --pure-lockfile --prefer-offline
+else
+  npm config set cache "$HOME/.npm-cache"
+  npm install
+fi
